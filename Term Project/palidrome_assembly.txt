@@ -1,0 +1,51 @@
+.LC0:
+        .string "%s is Not Palindrome"
+.LC1:
+        .string "%s is palindrome"
+isPalindrome:
+        push    rbp
+        mov     rbp, rsp
+        sub     rsp, 32
+        mov     QWORD PTR [rbp-24], rdi
+        mov     DWORD PTR [rbp-4], 0
+        mov     rax, QWORD PTR [rbp-24]
+        mov     rdi, rax
+        call    strlen
+        sub     eax, 1
+        mov     DWORD PTR [rbp-8], eax
+        jmp     .L2
+.L4:
+        mov     eax, DWORD PTR [rbp-4]
+        lea     edx, [rax+1]
+        mov     DWORD PTR [rbp-4], edx
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-24]
+        add     rax, rdx
+        movzx   ecx, BYTE PTR [rax]
+        mov     eax, DWORD PTR [rbp-8]
+        lea     edx, [rax-1]
+        mov     DWORD PTR [rbp-8], edx
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-24]
+        add     rax, rdx
+        movzx   eax, BYTE PTR [rax]
+        cmp     cl, al
+        je      .L2
+        mov     rax, QWORD PTR [rbp-24]
+        mov     rsi, rax
+        mov     edi, OFFSET FLAT:.LC0
+        mov     eax, 0
+        call    printf
+        jmp     .L1
+.L2:
+        mov     eax, DWORD PTR [rbp-8]
+        cmp     eax, DWORD PTR [rbp-4]
+        jg      .L4
+        mov     rax, QWORD PTR [rbp-24]
+        mov     rsi, rax
+        mov     edi, OFFSET FLAT:.LC1
+        mov     eax, 0
+        call    printf
+.L1:
+        leave
+        ret
